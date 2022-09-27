@@ -28,13 +28,11 @@ all of this is a mess - i have little plans to organize it unless i go insane ov
 ## using the tool
 
 
-`
 ` python3 vodmaker.py `
 
 opens a tkinter gui to create individual VODs from a single video in a directory
 
-`
-`./setup.sh [-s] [channelname] `
+` ./setup.sh [-s] [channelname] `
 
 `-s`: skip download, for if you have a video already in the directory (does not work if you dont inculde the channel name, oops)
 
