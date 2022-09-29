@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# intended to be used in the directory that the video folders will be placed
+
 # this is 'how not to write a bash script but i'm learning shut up'
 # https://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash :)
 
@@ -24,37 +26,30 @@ done
 
 set -- "${POSITIONAL_ARGS[@]}"
 
-if [[ -n $1 ]]; then
-    CHANNEL=$1
-else
-    echo "usage: setup [-s] channel"
-    exit 1
-fi
-
 if [[ -z "$SKIP" ]]; then
-    twitch-dl videos --no-color $CHANNEL | grep --color=never "Video " > /tmp/ids
-    sed -i 's/Video //g' /tmp/ids
-
-    if [[ -d temp ]]; then
-        rm -rf temp/*
+    if [[ -n $1 ]]; then
+        CHANNEL=$1
     else
-        mkdir temp
+        echo "usage: setup [-s] channel"
+        exit 1
     fi
-    cd temp
+    twitch-dl videos --no-color $CHANNEL | grep --color=never "Video " > /tmp/quickvod/ids
+    sed -i 's/Video //g' /tmp/quickvod/ids
+
     num=0
-    touch files.tmp
-    cat /tmp/ids | while read line; do
-        if grep -q $line ../.ids; then # tests if line is in file
+    touch /tmp/quickvod/files.tmp
+    cat /tmp/quickvod/ids | while read line; do
+        if grep -q $line .ids; then # tests if line is in file
             echo "Already downloaded ID $line, skipping."
         else
-            echo $line >> ../.ids # append id
+            echo $line >> .ids # append id
             num=`expr $num + 1`
             twitch-dl download -q 1080p60 $line -o ${num}.mp4
             echo ${num}.mp4 >> files.tmp
         fi
     done
 
-    num=`ls *.mp4 | wc -l`
+    num=`ls /tmp/quickvod/*.mp4 | wc -l`
     if [ "$num" -eq 0 ]; then
         echo No videos downloaded.
     elif [ "$num" -eq 1 ]; then
@@ -62,12 +57,10 @@ if [[ -z "$SKIP" ]]; then
     else
         ffmpeg -f concat -safe 0 -i files.tmp -c copy out.mp4
     fi
-    mv out.mp4 ..
-    cd ..
-    rm -rf temp
-    rm /tmp/ids
+    rm -rf /tmp/quickvod
 fi
 
-# do python stuff first
-./split.py
+# i dont know a more clean way to run this other than putting it at the end of the script
+# should this just be run by the user?
+quick-vod/split.py
 

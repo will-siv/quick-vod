@@ -22,7 +22,7 @@ def timeToSec(s):
     nums = s.split(':')
     nums.reverse() # reverse so the enumeration works
 
-    # this is kinda like sci-not for the time
+    # this is kinda like sci-notation for the time
     seconds = 0
     for i, num in enumerate(nums):
         seconds += int(num)*(60**i) # works, probably slow, shut up
@@ -30,7 +30,7 @@ def timeToSec(s):
 
 def main():
 
-    with open("matches.csv") as r:
+    with open("quick-vod/matches.csv") as r:
         matches = splitCSV(r)
         name = matches[0][0]
         try:
@@ -57,7 +57,7 @@ def main():
         end = game[4]
         print(f"'%s': %s-%s" % (title, start, end))
         ffmpeg_extract_subclip(video, timeToSec(start), timeToSec(end), "matches/" + title + ".mp4")
-    os.rename("../matches.csv", "matches.csv")
+    os.rename("../quick-vod/matches.csv", "matches.csv")
     print("Finished")
 
 if __name__ == "__main__":
