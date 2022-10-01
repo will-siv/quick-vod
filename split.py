@@ -30,7 +30,7 @@ def timeToSec(s):
 
 def main():
 
-    with open("quick-vod/matches.csv") as r:
+    with open("matches.csv") as r:
         matches = splitCSV(r)
         name = matches[0][0]
         try:

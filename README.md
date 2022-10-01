@@ -21,7 +21,7 @@ splits videos based on a csv made by `vodmaker.py`
 
 ## setup.sh
 
-main script; downloads VOD from twitch channel (unless told not to), then splits said VOD into parts in a named directory
+main script; downloads VOD from twitch channel (unless told not to), then splits said VOD into parts in a named directory. places a file ".ids" into the directory that the script is run in
 
 all of this is a mess - i have little plans to organize it unless i go insane over how bad it is
 
@@ -34,12 +34,20 @@ $ ls
 Tournament 1    Tournament 2    quick-vod
 ```
 
-` python3 quick-vod/vodmaker.py `
+### run vodmaker
+
+`quick-vod/vodmaker.py`
 
 opens a tkinter gui to create individual VODs from a single video in a directory
 
-` quick-vod/setup.sh [-s] [channelname] `
+### run setup
+
+`quick-vod/setup.sh [-s] [channelname]`
 
 `-s`: skip download, for if you have a video already in the directory
 
+## what's next?
 
+- cross platform probably
+- start.gg integration to import match names and players, either automatically or through a gui
+- rewriting this whole thing in a different language

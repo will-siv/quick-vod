@@ -33,19 +33,20 @@ if [[ -z "$SKIP" ]]; then
         echo "usage: setup [-s] channel"
         exit 1
     fi
+    mkdir /tmp/quickvod
     twitch-dl videos --no-color $CHANNEL | grep --color=never "Video " > /tmp/quickvod/ids
     sed -i 's/Video //g' /tmp/quickvod/ids
 
     num=0
-    touch /tmp/quickvod/files.tmp
+    touch /tmp/quickvod/files
     cat /tmp/quickvod/ids | while read line; do
         if grep -q $line .ids; then # tests if line is in file
             echo "Already downloaded ID $line, skipping."
         else
             echo $line >> .ids # append id
             num=`expr $num + 1`
-            twitch-dl download -q 1080p60 $line -o ${num}.mp4
-            echo ${num}.mp4 >> files.tmp
+            twitch-dl download -q 1080p60 $line -o /tmp/quickvod/${num}.mp4
+            echo "/tmp/quickvod/${num}.mp4" >> /tmp/quickvod/files
         fi
     done
 
@@ -53,9 +54,9 @@ if [[ -z "$SKIP" ]]; then
     if [ "$num" -eq 0 ]; then
         echo No videos downloaded.
     elif [ "$num" -eq 1 ]; then
-        mv 1.mp4 out.mp4
+        mv /tmp/quickvod/1.mp4 out.mp4
     else
-        ffmpeg -f concat -safe 0 -i files.tmp -c copy out.mp4
+        ffmpeg -f concat -safe 0 -i /tmp/quickvod/files -c copy out.mp4
     fi
     rm -rf /tmp/quickvod
 fi
