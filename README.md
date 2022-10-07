@@ -51,3 +51,4 @@ opens a tkinter gui to create individual VODs from a single video in a directory
 - cross platform probably
 - start.gg integration to import match names and players, either automatically or through a gui
 - rewriting this whole thing in a different language
+- another script to update the video titles and descriptions with presets
