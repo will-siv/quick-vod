@@ -57,7 +57,7 @@ def main():
         end = game[4]
         print(f"'%s': %s-%s" % (title, start, end))
         ffmpeg_extract_subclip(video, timeToSec(start), timeToSec(end), "matches/" + title + ".mp4")
-    os.rename("../quick-vod/matches.csv", "matches.csv")
+    os.rename("../matches.csv", "matches.csv")
     print("Finished")
 
 if __name__ == "__main__":
